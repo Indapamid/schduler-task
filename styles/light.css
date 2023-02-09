@@ -1,0 +1,87 @@
+body {
+  background: #fff;
+  color: #000;
+}
+
+.header {
+  background: #fff;
+  color: #000;
+  box-shadow: 0 4px 12px 0 #0d234308;
+}
+
+.nav__item-calendar-nav {
+  color: #000;
+  background: #fff;
+  border: solid 1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 12px 0 #0d234308;
+}
+
+.nav__item-calendar-change-view {
+  color: #000;
+  background: #fff;
+  border: solid 1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 12px 0 #0d234308;
+}
+
+.nav__item-calendar-nav:hover,
+.nav__item-calendar_active {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.nav__item-calendar-change-view:hover,
+.nav__item-calendar_active {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.theme-button {
+  color: #f4f4f4;
+  background: #222224;
+  border: solid 1px rgba(0, 0, 0, 0.06);
+}
+
+.theme-button:hover {
+  background: #303030;
+}
+
+.calendar__table-head-cell-null {
+  background: #fff;
+  border: solid 1px;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.calendar__table-head-cell-date {
+  background: #fff;
+  border: solid 1px;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.calendar__list-user-cell-name {
+  background: #fff;
+  border: solid 1px;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.calendar__list-user-cell-task {
+  background: #fff;
+  border-left: solid 1px rgba(0, 0, 0, 0.08);
+  border-right: solid 1px rgba(0, 0, 0, 0.08);
+  border-bottom: solid 1px rgba(0, 0, 0, 0.06);
+}
+
+.calendar__list-user-cell-task-name {
+  color: #fff;
+  background-color: rgba(36, 68, 113, 0.6);
+  border: solid 1px rgba(105, 114, 120, 0.5);
+}
+
+.current-day {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.success-task {
+  background-color: rgb(86, 195, 130);
+}
+
+.failed-task {
+  background-color: rgb(217, 78, 78);
+}
