@@ -11,49 +11,96 @@ const presentDay = new Date()
 
 const amountDays = {
   oneDay: 1, //
-  threeDay: 3,
-  oneWeek: 7, //
+  threeDay: 3, //
+  oneWeek: 7,
   twoWeeks: 14
 }
 
+//стартовое состояние календаря 1 неделя
 let currentOptionsNumberDays = amountDays.oneWeek
 
 let lastShowDate
 
-onInit()
+function initLoader() {
+  let templateLoader = document
+    .querySelector('.loader-template')
+    .content.querySelector('.loader')
+    .cloneNode(true)
+  document
+  templateLoader.classList.add('show');
 
-//инициализации страницы
-async function onInit() {
-  let { loaderDiv, loaderText, loaderScale } = loader()
-  //получаем данные
-  async function requestApi(way) {
-    try {
-      let resp = await fetch(way.url);
-      if (resp.ok) {
-        let data = await resp.json();
-        return data;
+  document.body.append(templateLoader)
+}
+
+let intervalIdLoader
+
+function spinningtLoader(startWidth, endWidth, interval) {
+  return function (staus) {
+    let loaderText = document.querySelector('.loader__text')
+    let loaderScale = document.querySelector('.loader__scale')
+    let count = startWidth
+    if (!staus) {
+      clearInterval(intervalIdLoader)
+      return
+    }
+    if (staus) {
+      const loading = () => {
+        loaderText.textContent = `${count}%`
+        loaderScale.style.width = `${count}%`
+        if (count == endWidth) return
+        count++
       }
-      throw 'status is not "OK"';
-    } catch (e) {
-      //берем из файлов, если сервер не доступен
-      let resp = await fetch(way.file);
-      if (!resp.ok) {
-        throw e;
-      }
+
+      intervalIdLoader = setInterval(loading, interval)
+    }
+  }
+}
+
+let startLoader = spinningtLoader(0, 99, 30)
+
+function changeDisplay(div) {
+  div.classList.toggle('hide');
+  div.classList.toggle('show');
+}
+
+//получаем данные
+async function requestApi(way) {
+  try {
+    let resp = await fetch(way.url);
+
+    if (resp.ok) {
       let data = await resp.json();
       return data;
     }
-  }
 
-  let wrapper = document.querySelector('.wrapper')
-  wrapper.style = 'display:none'
-  startCounting({ width: 92, loaderText, loaderScale, interval: 20, count: 0 })
+    throw 'status is not "OK"';
+  } catch (e) {
+    //берем из файлов, если сервер не доступен
+    let resp = await fetch(way.file);
+
+    if (!resp.ok) {
+      throw e;
+    }
+
+    let data = await resp.json();
+    return data;
+  }
+}
+
+//инициализации страницы
+async function onInit() {
+  let divWrapper = document.querySelector('.wrapper')
+  let divLodaer = document.querySelector('.loader')
+
+  startLoader(true)
+
   const [dataUsers, dataTasks] = await Promise.all([requestApi(usersListApiUrl), requestApi(tasksListApiUrl)])
-  startCounting({ width: 100, loaderText, loaderScale, interval: 20, count: 92 })
-  setTimeout(() => {
-    wrapper.style = 'display:block'
-    loaderDiv.style = 'display:none'
-  }, 250)
+
+  startLoader(false)
+
+  // divLodaer.remove()
+  changeDisplay(divLodaer)
+  changeDisplay(divWrapper)
 
   // console.log(dataUsers, dataTasks)
 
@@ -61,24 +108,25 @@ async function onInit() {
   function showDataCalendare(users, tasks) {
     return function (days, date) {
       clearBodyTable()
-      // let widthSize = `flex-basis: ${100 / (days + 1)}%;`
       let widthSize = 100 / (days + 1)
       let calendarList = document.querySelector('.calendar__list')
 
       users.forEach(user => {
+
         let templateBody = document
           .querySelector('.calendar__list-user-template')
           .content.querySelector('.calendar__list-user')
           .cloneNode(true)
+
         templateBody = showUsers(user, templateBody, widthSize)
         templateBody = showTasks(user, tasks, templateBody, widthSize, days, date)
 
         calendarList.append(templateBody)
       });
-      // console.log(users, tasks)
     }
   }
 
+  //заполненеия фио
   function showUsers(user, templateBody, widthSize) {
     let divUser = templateBody.querySelector('.calendar__list-user-cell-name')
     divUser.style = `min-width:${widthSize}%;`
@@ -87,6 +135,8 @@ async function onInit() {
     return templateBody
   }
 
+
+  //заполнение строки задачи пользователя 
   function showTasks(user, tasks, templateBody, widthSize, days, date) {
     let userTask = tasks.filter(task => task.executor === user.id)
     // console.log(userTask)
@@ -286,27 +336,6 @@ async function onInit() {
     if (tableBody) tableBody.forEach(el => el.remove())
   }
 
-  //добавляем события на кнопки
-  let changeView = document.getElementById('changeView')
-  changeView.getAttribute("id_variant")
-  changeView.setAttribute("id_variant", "oneWeek")
-  changeView.addEventListener("click", changeViewDays)
-
-  let calendarBack = document.getElementById('calendarLeft')
-  calendarBack.addEventListener("click", () => {
-    createHeadInTable("left");
-  });
-
-  let calendarCurrent = document.getElementById('calendarToday')
-  calendarCurrent.addEventListener("click", () => {
-    createHeadInTable("today");
-  });
-
-  let calendarNext = document.getElementById('calendarRight')
-  calendarNext.addEventListener("click", () => {
-    createHeadInTable("right");
-  });
-
   //функция для сравнения дат
   function dateComparison(startDate, currentDate, endDate) {
     if (currentDate >= startDate && endDate >= currentDate) return true
@@ -314,101 +343,87 @@ async function onInit() {
     return false
   }
 
-  function getDayWeek(date) {
-    let numDay = date.getDay()
-    let nameDay = ''
-    switch (numDay) {
-      case 1: nameDay = 'ПН'
-        break
-      case 2: nameDay = 'ВТ'
-        break
-      case 3: nameDay = 'СР'
-        break
-      case 4: nameDay = 'ЧТ'
-        break
-      case 5: nameDay = 'ПТ'
-        break
-      case 6: nameDay = 'СБ'
-        break
-      case 0: nameDay = 'ВС'
-        break
-    }
-    return nameDay
+  //добавляем события на кнопки
+  let changeView = document.getElementById('changeView')
+
+  changeView.getAttribute("id_variant")
+  changeView.setAttribute("id_variant", "oneWeek")
+  changeView.addEventListener("click", changeViewDays)
+
+  let calendarBack = document.getElementById('calendarLeft')
+
+  calendarBack.addEventListener("click", () => {
+    createHeadInTable("left");
+  });
+
+  let calendarCurrent = document.getElementById('calendarToday')
+
+  calendarCurrent.addEventListener("click", () => {
+    createHeadInTable("today");
+  });
+
+  let calendarNext = document.getElementById('calendarRight')
+
+  calendarNext.addEventListener("click", () => {
+    createHeadInTable("right");
+  });
+}
+
+function getDayWeek(date) {
+  let numDay = date.getDay()
+  let nameDay = ''
+  switch (numDay) {
+    case 1: nameDay = 'ПН'
+      break
+    case 2: nameDay = 'ВТ'
+      break
+    case 3: nameDay = 'СР'
+      break
+    case 4: nameDay = 'ЧТ'
+      break
+    case 5: nameDay = 'ПТ'
+      break
+    case 6: nameDay = 'СБ'
+      break
+    case 0: nameDay = 'ВС'
+      break
   }
+  return nameDay
+}
 
-  function getDayMount(date) {
-    let numMonth = date.getMonth()
-    let nameMonth = ''
-    switch (numMonth) {
-      case 0: nameMonth = 'Январь'
-        break
-      case 1: nameMonth = 'Февраль'
-        break
-      case 2: nameMonth = 'Март'
-        break
-      case 3: nameMonth = 'Апрель'
-        break
-      case 4: nameMonth = 'Май'
-        break
-      case 5: nameMonth = 'Июнь'
-        break
-      case 6: nameMonth = 'Июль'
-        break
-      case 7: nameMonth = 'Август'
-        break
-      case 8: nameMonth = 'Сентябрь'
-        break
-      case 9: nameMonth = 'Октябрь'
-        break
-      case 10: nameMonth = 'Ноябрь'
-        break
-      case 11: nameMonth = 'Декабрь'
-        break
+function getDayMount(date) {
+  let numMonth = date.getMonth()
+  let nameMonth = ''
+  switch (numMonth) {
+    case 0: nameMonth = 'Январь'
+      break
+    case 1: nameMonth = 'Февраль'
+      break
+    case 2: nameMonth = 'Март'
+      break
+    case 3: nameMonth = 'Апрель'
+      break
+    case 4: nameMonth = 'Май'
+      break
+    case 5: nameMonth = 'Июнь'
+      break
+    case 6: nameMonth = 'Июль'
+      break
+    case 7: nameMonth = 'Август'
+      break
+    case 8: nameMonth = 'Сентябрь'
+      break
+    case 9: nameMonth = 'Октябрь'
+      break
+    case 10: nameMonth = 'Ноябрь'
+      break
+    case 11: nameMonth = 'Декабрь'
+      break
 
-    }
-    return nameMonth
   }
+  return nameMonth
 }
 
-function loader() {
-  let { loaderDiv, loaderText, loaderContainer, loaderScale } = createElementsForLoader()
-  setAttributeLoader({ loaderDiv, loaderText, loaderContainer, loaderScale })
-  document.body.append(loaderDiv)
-  loaderDiv.append(loaderText)
-  loaderDiv.append(loaderContainer)
-  loaderContainer.append(loaderScale)
-  return { loaderDiv, loaderText, loaderScale }
-}
+initLoader()
 
-async function startCounting({ width, loaderText, loaderScale, interval, count }) {
-  let counting = count
-  let intervalId
-
-  const func = () => {
-    loaderText.textContent = `${counting}%`
-    loaderScale.style.width = `${counting}%`
-    if (counting === width) {
-      clearInterval(intervalId)
-      return
-    }
-    counting++
-  }
-
-  intervalId = setInterval(func, interval)
-}
-
-function setAttributeLoader({ loaderDiv, loaderText, loaderContainer, loaderScale }) {
-  loaderDiv.setAttribute('class', 'loader')
-  loaderText.setAttribute('class', 'loader__text')
-  loaderContainer.setAttribute('class', 'loader__container')
-  loaderScale.setAttribute('class', 'loader__scale')
-}
-
-function createElementsForLoader() {
-  let loaderDiv = document.createElement('div')
-  let loaderText = document.createElement('div')
-  let loaderContainer = document.createElement('div')
-  let loaderScale = document.createElement('div')
-
-  return { loaderDiv, loaderText, loaderContainer, loaderScale }
-}
+onInit()

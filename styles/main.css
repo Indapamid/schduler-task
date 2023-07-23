@@ -14,6 +14,14 @@ html {
   font-size: 16px;
 }
 
+.show {
+  display: block;
+}
+
+.hide {
+  display: none;
+}
+
 .wrapper {
   width: 100%;
 }
@@ -131,7 +139,7 @@ html {
   overflow: hidden;
 }
 
-.loader {
+.loader__wrapper {
   display: flex;
   height: 100vh;
   justify-content: center;
@@ -152,7 +160,7 @@ html {
 }
 
 .loader__scale {
-  width: 0%;
+  width: 10%;
   height: 100%;
   background-color: aqua;
   border-radius: 4px;
@@ -181,6 +189,6 @@ html {
     margin: 1px 0 1px 0;
   }
   .calendar__list-user-row {
-    min-height: 100px;
+    min-height: 140px;
   }
 }

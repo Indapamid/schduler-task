@@ -1,81 +1,81 @@
-body {
+.dark-theme {
   background: #111112;
   color: #f4f4f4;
 }
 
-.header {
+.dark-theme .header {
   background: #18181a;
   color: #f4f4f4;
 }
 
-.nav__item-calendar-nav {
-  color: #f4f4f4;
-  background: #18181a;
-  border: solid 2px #4e4e4e;
-}
-
-.nav__item-calendar-change-view {
+.dark-theme .nav__item-calendar-nav {
   color: #f4f4f4;
   background: #18181a;
   border: solid 2px #4e4e4e;
 }
 
-.nav__item-calendar-nav:hover,
-.nav__item-calendar_active {
+.dark-theme .nav__item-calendar-change-view {
+  color: #f4f4f4;
+  background: #18181a;
+  border: solid 2px #4e4e4e;
+}
+
+.dark-theme .nav__item-calendar-nav:hover,
+.dark-theme .nav__item-calendar_active {
   background: #444;
 }
 
-.nav__item-calendar-change-view:hover,
-.nav__item-calendar_active {
+.dark-theme .nav__item-calendar-change-view:hover,
+.dark-theme .nav__item-calendar_active {
   background: #303030;
 }
 
-.theme-button {
+.dark-theme .theme-button {
   color: #000;
   background: #fff;
   border: solid 2px #4e4e4e;
 }
 
-.theme-button:hover {
+.dark-theme .theme-button:hover {
   background: rgb(240, 240, 240);
 }
 
-.calendar__table-head-cell-null {
+.dark-theme .calendar__table-head-cell-null {
   background-color: #222224;
   border: solid 1px #697278;
 }
 
-.calendar__table-head-cell-date {
+.dark-theme .calendar__table-head-cell-date {
   background-color: #222224;
   border: solid 1px #697278;
 }
 
-.calendar__list-user-cell-name {
+.dark-theme .calendar__list-user-cell-name {
   background-color: #222224;
   border: solid 1px #697278;
 }
 
-.calendar__list-user-cell-task {
+.dark-theme .calendar__list-user-cell-task {
   background-color: #222224;
   border-left: solid 1px rgba(105, 114, 120);
   border-right: solid 1px rgba(105, 114, 120);
   border-bottom: solid 1px rgba(105, 114, 120, 0.5);
 }
 
-.calendar__list-user-cell-task-name {
+.dark-theme .calendar__list-user-cell-task-name {
   background-color: rgb(36, 68, 113);
   border: solid 1px rgba(105, 114, 120, 0.5);
 }
 
-.current-day {
+.dark-theme .current-day {
   background-color: #303030;
   border: solid 1px #697278;
 }
 
-.success-task {
+.dark-theme .success-task {
   background-color: rgba(86, 195, 130, 0.5);
 }
 
-.failed-task {
-  background-color: rgba(217, 78, 78,  0.5);
+.dark-theme .failed-task {
+  background-color: rgba(217, 78, 78, 0.5);
 }

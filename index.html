@@ -6,27 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Планировщик</title>
     <link rel="stylesheet" type="text/css" href="styles/main.css" />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="styles/dark.css"
-      id="theme-link"
-    />
+    <link rel="stylesheet" type="text/css" href="styles/dark.css" />
+    <link rel="stylesheet" type="text/css" href="styles/light.css" />
   </head>
-  <body>
-    <!-- <div class="loader"> -->
-    <!-- <div class="loader__text">
-        0%
-      </div>
-      <div class="loader__container">
-        <div class="loader__scale"></div>
-      </div> -->
-    <!-- </div> -->
-
-    <div class="wrapper">
+  <body class="page dark-theme">
+    <!-- подправить тэги и поубирать индетификаторы  подмауть над оберткой header main footer-->
+    <div class="wrapper hide">
       <header class="header">
         <div class="header__content">
-          <!-- <h1>Планировщик</h1> -->
           <nav class="nav">
             <div class="nav__content">
               <div class="nav__content-container">
@@ -76,6 +63,17 @@
           <!-- <div class="calendar__list-user-cell-task"></div> -->
         </div>
       </li>
+    </template>
+
+    <template class="loader-template">
+      <div class="loader">
+        <div class="loader__wrapper">
+          <div class="loader__text"></div>
+          <div class="loader__container">
+            <div class="loader__scale"></div>
+          </div>
+        </div>
+      </div>
     </template>
 
     <script type="text/javascript" src="scripts/calendar.js"></script>
